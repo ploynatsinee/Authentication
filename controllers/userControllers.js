@@ -15,10 +15,16 @@ const createUser = async (req, res) => {
 };
 
 const getUserAll = async (req, res, next) => {
-    console.log("Hello")
-    const users = await User.find()
-    console.log(users)
-    res.send(users.map((users) => users.toJSON()))
+    try {
+        // console.log("Hello")
+        const users = await User.find()
+        // console.log(users)
+        res.send(users.map((users) => users.toJSON()))
+    } catch (error) {
+        res.status(400).send(error);
+    }
+
+
 };
 
 module.exports = {
