@@ -7,4 +7,5 @@ const authController = require("../controllers/authControllers");
 // userRoutes.get("/",userController.getUserAll)
 authRoutes.get("/", authController.getCookies)
 
+
 module.exports = authRoutes;

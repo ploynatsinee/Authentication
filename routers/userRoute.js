@@ -2,8 +2,9 @@ const express = require("express");
 const userRoutes = express.Router();
 const userController = require("../controllers/userControllers");
 
-
-userRoutes.post("/", userController.createUser);
+userRoutes.post("/signup", userController.createUser);
 userRoutes.get("/",userController.getUserAll)
+userRoutes.post("/signin",userController.signIn)
+// userRoutes.post("/signout",userController.signOut)
 
 module.exports = userRoutes;
