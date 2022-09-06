@@ -2,6 +2,7 @@ const User = require("../models/userModels");
 const { v4: uuidv4 } = require('uuid');
 
 const createUser = async (req, res) => {
+    // res.send('POST API');
     try {
     const newUser = new User({ user_id: uuidv4(), ...req.body });
       await newUser.save();
