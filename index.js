@@ -28,6 +28,10 @@ app.get('/', (req, res) => {
 const userRoutes = require("./routers/userRoute");
 app.use("/users", userRoutes);
 
+//auth
+const authRoutes = require("./routers/authRoute");
+app.use("/auth", authRoutes)
+
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
