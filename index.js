@@ -17,7 +17,7 @@ app.use(
   session({
     secret: "Japdkdkdlpdlwpldwp",
     saveUninitialized: true,
-    cookie: { secure: true,  maxAge: oneDay},
+    cookie: { secure: true, maxAge: oneDay },
     resave: false,
   })
 );
@@ -36,19 +36,9 @@ app.use(async (req, res, next) => {
 
 app.get('/', (req, res) => {
   try {
-    // if (!username) {
-      
-      res.cookie('name', 'value', { expire: 360000 + Date.now(), httpOnly: true, signed: false });
-      res.send(req.cookies);
-      
-      console.log('req Cookies: ',req.cookies)
-      // req.signedCookies['name']
-      // console.log('Signed Cookies: ', req.signedCookies)
-    // } else if (username) {
-    //   var username = req.body.username;
-    //   return res.send();
-    // }
-
+    res.cookie('name', 'value', { expire: 360000 + Date.now(), httpOnly: true, signed: false });
+    res.send(req.cookies);
+    console.log('req Cookies: ', req.cookies)
   } catch (error) {
     res.status(400).send(error);
     console.log(error)
@@ -59,7 +49,7 @@ app.get('/', (req, res) => {
 const userRoutes = require("./routers/userRoute");
 app.use("/users", userRoutes);
 
-//Auth
+//Auth not use
 const authRoutes = require("./routers/authRoute");
 app.use("/auth", authRoutes)
 

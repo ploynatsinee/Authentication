@@ -16,9 +16,7 @@ const createUser = async (req, res) => {
 
 const getUserAll = async (req, res, next) => {
   try {
-    // console.log("Hello")
     const users = await User.find()
-    // console.log(users)
     res.send(users.map((users) => users.toJSON()))
   } catch (error) {
     res.status(400).send(error);
@@ -59,7 +57,8 @@ const signIn = async (req, res, next) => {
 const signOut = async (req, res, next) => {
   try {
     req.session.destroy();
-    res.send("Success");
+    res.clearCookie('Set-Cookie')
+    res.send('You are logged out');
   } catch (err) {
     res.status(400).send(error);
   }
