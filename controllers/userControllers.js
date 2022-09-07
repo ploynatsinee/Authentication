@@ -6,10 +6,10 @@ const createUser = async (req, res) => {
   try {
     const newUser = new User({ user_id: uuidv4(), ...req.body });
     await newUser.save();
+    res.cookie('Set-Cookie', 'isLoggedin=true');
     res.send("new user create success");
   } catch (error) {
     res.status(400).send(error);
-    console.log(error)
   }
 
 };
@@ -21,34 +21,27 @@ const getUserAll = async (req, res, next) => {
   } catch (error) {
     res.status(400).send(error);
   }
-
-
 };
-
 
 const signIn = async (req, res, next) => {
 
   const { username, password } = req.body;
-  const user = await User.findOne({ username }).select("+password");
+  const user = await User.findOne({ username, password }).select("+password");
 
   if (user) {
-
-    // bcrypt.compare(password, user.password, function (err, result) {
-    if (user) {
-      res.cookie('Set-Cookie', 'isLoggedin=true');
-      req.session.userId = user.id;
-      console.log(req.session)
-      res.send({
-        id: user.id,
-        username: user.username,
-        password: user.password,
-      });
-    } else {
-      res.status(401).send("Authentication failed");
-      console.log(user.id)
-      console.log(user.password)
-    }
-    // });
+    bcrypt.hash(password, 10).then(async (hash) => {
+      if (user) {
+        res.cookie('Set-Cookie', 'isLoggedin=true');
+        req.session.userId = user.id;
+        res.send({
+          id: user.id,
+          username: user.username,
+          password: hash,
+        });
+      } else {
+        res.status(401).send("Authentication failed");
+      }
+    })
   } else {
     res.status(401).send("Authentication failed");
   }
