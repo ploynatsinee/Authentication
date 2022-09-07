@@ -3,7 +3,6 @@ const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcryptjs");
 
 const createUser = async (req, res) => {
-    // res.send('POST API');
     try {
         const newUser = new User({ user_id: uuidv4(), ...req.body });
         await newUser.save();
@@ -37,12 +36,15 @@ const signIn = async (req, res, next) => {
     if (user) {
       bcrypt.compare(password, user.password, function (err, result) {
         if (result) {
-          req.session.userId = user.id;
-          res.send({
-            id: user.id,
-            // name: user.name,
-            username: user.username,
-          });
+          req.cookies.username= req.body.username;
+          console.log(req.cookies);
+          res.send();
+          // req.session.userId = user.id;
+          // res.send({
+          //   id: user.id,
+          //   name: user.name,
+          //   username: user.username,
+          // });
         } else {
           res.status(401).send("Authentication failed");
         }
