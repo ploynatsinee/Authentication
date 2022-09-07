@@ -6,6 +6,6 @@ userRoutes.post("/signup", userController.createUser);
 userRoutes.post("/signin",userController.signIn)
 
 userRoutes.get("/",userController.getUserAll)
-// userRoutes.post("/signout",userController.signOut)
+userRoutes.post("/signout",userController.signOut)
 
 module.exports = userRoutes;

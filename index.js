@@ -3,12 +3,25 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-// const session = require("express-session");
+const session = require("express-session");
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.set('trust proxy', 1) // trust first proxy whattt
 require("dotenv").config();
+
+app.use(
+  session({
+    secret: "Japdkdkdlpdlwpldwp",
+    saveUninitialized: true,
+    cookie: { secure: true },
+    resave: false,
+  })
+);
+
+
 
 app.use(async (req, res, next) => {
   try {
