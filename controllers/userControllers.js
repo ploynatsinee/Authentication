@@ -37,6 +37,7 @@ const signIn = async (req, res, next) => {
 
     // bcrypt.compare(password, user.password, function (err, result) {
     if (user) {
+      res.cookie('Set-Cookie', 'isLoggedin=true');
       req.session.userId = user.id;
       console.log(req.session)
       res.send({
