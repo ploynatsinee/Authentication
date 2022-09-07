@@ -21,8 +21,6 @@ app.use(
   })
 );
 
-
-
 app.use(async (req, res, next) => {
   try {
     await mongoose.connect(process.env.MONGO_DB_URI);
@@ -35,7 +33,7 @@ app.use(async (req, res, next) => {
 
 app.get('/', (req, res) => {
   try {
-    res.cookie('name', 'value', { expire: 360000 + Date.now(), httpOnly: true, signed: false });
+    res.cookie('name', 'value=true', { expire: 360000 + Date.now(), httpOnly: true, signed: false });
     res.send(req.cookies);
     console.log('req Cookies: ', req.cookies)
   } catch (error) {
@@ -47,10 +45,6 @@ app.get('/', (req, res) => {
 //User
 const userRoutes = require("./routers/userRoute");
 app.use("/users", userRoutes);
-
-//Auth not use
-const authRoutes = require("./routers/authRoute");
-app.use("/auth", authRoutes)
 
 const PORT = process.env.PORT || 4000;
 
