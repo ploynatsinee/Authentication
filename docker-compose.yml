@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  web:
+    image: "authbe2:latest"
+    build: .
+    ports:
+      - "4000"
+    env_file:
+      - .env
+    links:
+      - mongo
+  mongo:
+    image: "mongo:latest"
+    volumes:
+      - ./data:/data/db
+    env_file:
+      - .env
