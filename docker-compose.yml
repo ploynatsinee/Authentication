@@ -8,19 +8,7 @@ services:
     ports:
       - '4000:4000'
     environment:
-      - MONGO_DB_CONNSTRING= mongodb://natsinee:natsineedev@mongodb/test
-      # MONGO_DB_URI: mongodb://natsinee:natsineedev@mongo/test
-      # MONGO_DB_URI: mongodb+srv://natsinee:natsineedev@auth.ucry5ip.mongodb.net/test
-
-#       # ME_CONFIG_MONGODB_ADMINUSERNAME: natsinee
-#       # ME_CONFIG_MONGODB_ADMINPASSWORD: natsineedev
-#       # ME_CONFIG_MONGODB_SERVER: mongo
-
-      # - PORT=4000
-      # - URL=http://localhost
-      # - MONGO_URL=mongodb://mongo:27017/test
-      # - DB_NAME=test
-      # - API_VERSION=v1
+      - MONGO_DB_CONNSTRING= mongodb://auth:auth12345@mongo/test
     links:
       - mongo
   mongo:
@@ -31,8 +19,8 @@ services:
     ports:
       - '27019:27019'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: natsinee
-      MONGO_INITDB_ROOT_PASSWORD: natsineedev
+      MONGO_INITDB_ROOT_USERNAME: auth
+      MONGO_INITDB_ROOT_PASSWORD: auth12345
       MONGO_INITDB_DATABASE: test
 
 
@@ -74,12 +62,4 @@ services:
 #     ports:
 #       - '27011:27011'
 
-# not use
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: natsinee
-    #   MONGO_INITDB_ROOT_PASSWORD: natsineedev
-    #   MONGO_INITDB_DATABASE: test
-
-# volumes:
-#   mongodb_api:
 

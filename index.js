@@ -25,6 +25,7 @@ app.use(async (req, res, next) => {
   try {
     // await mongoose.connect('mongodb://mongo:27011/test', {useNewUrlParser: true});
     await mongoose.connect(process.env.MONGODB_CONNSTRING)
+    // await mongoose.connect("http://localhost:27017/")
     next();
   } catch (error) {
     console.log(error);
