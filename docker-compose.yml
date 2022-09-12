@@ -1,17 +1,85 @@
 version: "3.9"
 services:
   web:
-    image: "authbe2:latest"
+    container_name: auth
+    image: authbe2:latest
+    restart: always
     build: .
     ports:
-      - "4000"
-    env_file:
-      - .env
+      - '4000:4000'
+    environment:
+      - MONGO_DB_CONNSTRING= mongodb://natsinee:natsineedev@mongodb/test
+      # MONGO_DB_URI: mongodb://natsinee:natsineedev@mongo/test
+      # MONGO_DB_URI: mongodb+srv://natsinee:natsineedev@auth.ucry5ip.mongodb.net/test
+
+#       # ME_CONFIG_MONGODB_ADMINUSERNAME: natsinee
+#       # ME_CONFIG_MONGODB_ADMINPASSWORD: natsineedev
+#       # ME_CONFIG_MONGODB_SERVER: mongo
+
+      # - PORT=4000
+      # - URL=http://localhost
+      # - MONGO_URL=mongodb://mongo:27017/test
+      # - DB_NAME=test
+      # - API_VERSION=v1
     links:
       - mongo
   mongo:
-    image: "mongo:latest"
+    container_name: mongo
+    image: mongo:latest
     volumes:
       - ./data:/data/db
-    env_file:
-      - .env
+    ports:
+      - '27019:27019'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: natsinee
+      MONGO_INITDB_ROOT_PASSWORD: natsineedev
+      MONGO_INITDB_DATABASE: test
+
+
+# version: "3.9"
+# services:
+#   web:
+#     container_name: web
+#     build:
+#       context: ./web
+#     ports:
+#       - '4000:4000'
+#     command: npm start
+#     volumes:
+#       - ./web/usr/src/app
+#     links:
+#       - api_mongo
+#       - api
+
+#   api:
+#     build:
+#       context: ./api
+#     container_name: api
+#     image: authbe2:latest
+#     volumes:
+#       - ./usr/src/app
+#     environment:
+#       - PORT=4001
+#       - URL=http://localhost
+#       - MONGO_URL=mongodb://api_mongo:27011
+#       - DB_NAME=test
+#       - API_VERSION=v1 
+#     ports:
+#       - '4001:4001'
+#   api_mongo:
+#     image: mongo:latest
+#     container_name: api_mongo
+#     volumes:
+#       - ./mongodb_api:/data/db
+#     ports:
+#       - '27011:27011'
+
+# not use
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: natsinee
+    #   MONGO_INITDB_ROOT_PASSWORD: natsineedev
+    #   MONGO_INITDB_DATABASE: test
+
+# volumes:
+#   mongodb_api:
+

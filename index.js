@@ -23,7 +23,8 @@ app.use(
 
 app.use(async (req, res, next) => {
   try {
-    await mongoose.connect(process.env.MONGO_DB_URI);
+    // await mongoose.connect('mongodb://mongo:27011/test', {useNewUrlParser: true});
+    await mongoose.connect(process.env.MONGODB_CONNSTRING)
     next();
   } catch (error) {
     console.log(error);
