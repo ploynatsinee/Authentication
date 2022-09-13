@@ -1,15 +1,14 @@
+const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+require("dotenv").config();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-require("dotenv").config();
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(
@@ -23,9 +22,9 @@ app.use(
 
 app.use(async (req, res, next) => {
   try {
-    // await mongoose.connect('mongodb://mongo:27011/test', {useNewUrlParser: true});
-    await mongoose.connect(process.env.MONGODB_CONNSTRING)
-    // await mongoose.connect("http://localhost:27017/")
+    await mongoose.connect(process.env.MONGO_DB_URI,
+      { useNewUrlParser: true, useUnifiedTopology: true })
+    console.log("Database is connected")
     next();
   } catch (error) {
     console.log(error);

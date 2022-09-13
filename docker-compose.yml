@@ -8,7 +8,9 @@ services:
     ports:
       - '4000:4000'
     environment:
-      - MONGO_DB_CONNSTRING= mongodb://auth:auth12345@mongo/test
+      MONGO_DB_URI: mongodb://auth:auth12345@mongo/test?authSource=admin
+    env_file:
+      - .env
     links:
       - mongo
   mongo:
@@ -22,6 +24,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: auth
       MONGO_INITDB_ROOT_PASSWORD: auth12345
       MONGO_INITDB_DATABASE: test
+    env_file:
+      - .env
 
 
 # version: "3.9"
