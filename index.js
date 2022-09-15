@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(
   session({
-    secret: "Japdkdkdlpdlwpldwp",
+    secret: "bkojijlhijijjijll",
     saveUninitialized: true,
     cookie: { secure: true, maxAge: oneDay },
     resave: false,
