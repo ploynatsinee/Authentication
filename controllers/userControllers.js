@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
   try {
     const newUser = new User({ user_id: uuidv4(), ...req.body });
     await newUser.save();
-    const token = jwt.sign(newUser.toJSON(), "YOUR_256_BIT_SECRET_KEY", { expiresIn: '1h' });
+    const token = jwt.sign(newUser.toJSON(), process.env.MY_SECRET, { expiresIn: '1h' });
     res.cookie('Set-Cookie',token);
     res.send("new user create success");
   } catch (error) {
@@ -33,7 +33,7 @@ const signIn = async (req, res, next) => {
   if (user) {
     bcrypt.hash(password, 10).then(async (hash) => {
       if (user) {
-        const token = jwt.sign(user.toJSON(), "YOUR_256_BIT_SECRET_KEY", { expiresIn: '1h' });
+        const token = jwt.sign(user.toJSON(), process.env.MY_SECRET, { expiresIn: '1h' });
         res.cookie('Set-Cookie',token);
         req.session.userId = user.id;
         res.send({
