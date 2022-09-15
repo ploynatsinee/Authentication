@@ -22,8 +22,7 @@ app.use(
 
 app.use(async (req, res, next) => {
   try {
-    await mongoose.connect(process.env.MONGO_DB_URI,
-      { useNewUrlParser: true, useUnifiedTopology: true })
+    await mongoose.connect(process.env.MONGO_DB_URI)
     console.log("Database is connected")
     next();
   } catch (error) {

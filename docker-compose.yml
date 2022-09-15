@@ -8,7 +8,7 @@ services:
     ports:
       - '4000:4000'
     environment:
-      MONGO_DB_URI: mongodb://auth:auth12345@mongo/test?authSource=admin
+      MONGO_DB_URI: mongodb://natsinee:natsineedev@mongo/test?authSource=admin
     env_file:
       - .env
     links:
@@ -19,51 +19,10 @@ services:
     volumes:
       - ./data:/data/db
     ports:
-      - '27019:27019'
+      - '47019:47019'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: auth
-      MONGO_INITDB_ROOT_PASSWORD: auth12345
+      MONGO_INITDB_ROOT_USERNAME: natsinee
+      MONGO_INITDB_ROOT_PASSWORD: natsineedev
       MONGO_INITDB_DATABASE: test
     env_file:
       - .env
-
-
-# version: "3.9"
-# services:
-#   web:
-#     container_name: web
-#     build:
-#       context: ./web
-#     ports:
-#       - '4000:4000'
-#     command: npm start
-#     volumes:
-#       - ./web/usr/src/app
-#     links:
-#       - api_mongo
-#       - api
-
-#   api:
-#     build:
-#       context: ./api
-#     container_name: api
-#     image: authbe2:latest
-#     volumes:
-#       - ./usr/src/app
-#     environment:
-#       - PORT=4001
-#       - URL=http://localhost
-#       - MONGO_URL=mongodb://api_mongo:27011
-#       - DB_NAME=test
-#       - API_VERSION=v1 
-#     ports:
-#       - '4001:4001'
-#   api_mongo:
-#     image: mongo:latest
-#     container_name: api_mongo
-#     volumes:
-#       - ./mongodb_api:/data/db
-#     ports:
-#       - '27011:27011'
-
-
