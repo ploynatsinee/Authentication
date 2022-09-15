@@ -7,8 +7,8 @@ const createUser = async (req, res) => {
   try {
     const newUser = new User({ user_id: uuidv4(), ...req.body });
     await newUser.save();
-    const token = jwt.sign(JSON.stringify(newUser), "YOUR_256_BIT_SECRET_KEY", { expiresIn: '1h' });
-    res.cookie('Set_Cookie', { token });
+    const token = jwt.sign(newUser.toJSON(), "YOUR_256_BIT_SECRET_KEY", { expiresIn: '1h' });
+    res.cookie('Set_Cookie',token);
     res.send("new user create success");
   } catch (error) {
     res.status(400).send(error);
@@ -33,14 +33,15 @@ const signIn = async (req, res, next) => {
   if (user) {
     bcrypt.hash(password, 10).then(async (hash) => {
       if (user) {
-        const token = jwt.sign(JSON.stringify(user), "YOUR_256_BIT_SECRET_KEY", { expiresIn: '1h' });
-        res.cookie('Set_Cookie', { token });
+        const token = jwt.sign(user.toJSON(), "YOUR_256_BIT_SECRET_KEY", { expiresIn: '1h' });
+        res.cookie('Set_Cookie', token);
         // res.cookie('Set-Cookie', 'isLoggedin=true');
         req.session.userId = user.id;
         res.send({
-          id: user.id,
-          username: user.username,
-          password: hash,
+          // id: user.id,
+          token: token,
+          // username: user.username,
+          // password: hash,
         });
         console.log(req.session)
       } else {
@@ -53,25 +54,45 @@ const signIn = async (req, res, next) => {
 };
 
 const signOut = async (req, res, next) => {
-  const token = req.cookies.Set_Cookie;
+  // const token = req.cookies.Set_Cookie;
+  // const token = req.header("Set_Cookie");
+  // const string = JSON.stringify(token)
+
+  const token  = req.body.token;
   if (!token) {
-    return res.status(403).send("no token")
+    res.sendStatus(403).send("no token");
   }
-  if (token) {
-    try {
-      const data = jwt.verify(token, "YOUR_256_BIT_SECRET_KEY");
-      req.userId = data.id;
-      // req.userRole = data.role;
-      console.log(data.id)
-      // console.log(data.role)
-      req.session.destroy();
-      res.clearCookie('Set_Cookie')
-      res.send('You are logged out');
-    } catch (error) {
-      res.status(400).send(error);
-      console.log(error)
-    }
+
+  // if (!string) {
+  //   return res.status(403).send("no token")
+  // }
+
+  // const token = authorization.split(" ")[1];
+  try {
+    const data = jwt.verify(token, "YOUR_256_BIT_SECRET_KEY");
+    req.userId = data.id;
+    // req.userRole = data.role;
+    return next();
+  } catch {
+    return res.sendStatus(403).send("catch err");
   }
+
+  // try {
+  //   const data = jwt.verify(string, "YOUR_256_BIT_SECRET_KEY");
+  //   // req.user_id = data.id;
+  //   // // req.userRole = data.role;
+  //   // console.log(data.id)
+  //   // console.log(data.role)
+  //   if (data) {
+  //     req.session.destroy();
+  //     res.clearCookie('Set_Cookie')
+  //     res.send('You are logged out');
+  //   }
+
+  // } catch (error) {
+  //   res.status(400).send(error);
+  //   console.log(error)
+  // }
 
   // if (token) {
   //   try {
