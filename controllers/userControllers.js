@@ -54,7 +54,9 @@ const signIn = async (req, res, next) => {
 
 const signOut = async (req, res, next) => {
   const token = req.cookies.Set_Cookie;
-  if (token) {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username, password }).select("+password");
+  if (token,user) {
     try {
       const user = jwt.verify(token, process.env.MY_SECRET);
       req.user = user;
@@ -71,6 +73,13 @@ const signOut = async (req, res, next) => {
       res.send('You are not login');
     } catch (error) {
       res.status(400).send(error, 2);
+    }
+  }
+  if(!user) {
+    try {
+      res.send('Uncorrect user');
+    } catch (error) {
+      res.status(400).send(error, 3);
     }
   }
 };
