@@ -8,7 +8,7 @@ const createUser = async (req, res) => {
     const newUser = new User({ user_id: uuidv4(), ...req.body });
     await newUser.save();
     const token = jwt.sign(newUser.toJSON(), process.env.MY_SECRET, { expiresIn: '1h' });
-    res.cookie('Set-Cookie',token);
+    res.cookie('Set_Cookie', token);
     res.send("new user create success");
   } catch (error) {
     res.status(400).send(error);
@@ -34,12 +34,13 @@ const signIn = async (req, res, next) => {
     bcrypt.hash(password, 10).then(async (hash) => {
       if (user) {
         const token = jwt.sign(user.toJSON(), process.env.MY_SECRET, { expiresIn: '1h' });
-        res.cookie('Set-Cookie',token);
+        res.cookie('Set_Cookie', token);
         req.session.userId = user.id;
         res.send({
           id: user.id,
           username: user.username,
           password: hash,
+          token: token,
         });
         console.log(req.session)
       } else {
@@ -52,14 +53,26 @@ const signIn = async (req, res, next) => {
 };
 
 const signOut = async (req, res, next) => {
-  try {
-    req.session.destroy();
-    res.clearCookie('Set-Cookie')
-    res.send('You are logged out');
-  } catch (error) {
-    res.status(400).send(error);
+  const token = req.cookies.Set_Cookie;
+  if (token) {
+    try {
+      const user = jwt.verify(token, process.env.MY_SECRET);
+      req.user = user;
+      req.session.destroy();
+      res.clearCookie('Set_Cookie')
+      res.send('You are logged out');
+      next();
+    } catch (error) {
+      res.status(400).send(error, 1);
+    }
   }
-
+  if (!token) {
+    try {
+      res.send('You are not login');
+    } catch (error) {
+      res.status(400).send(error, 2);
+    }
+  }
 };
 
 module.exports = {
