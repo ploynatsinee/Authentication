@@ -7,11 +7,13 @@ const createUser = async (req, res) => {
   try {
     const newUser = new User({ user_id: uuidv4(), ...req.body });
     await newUser.save();
-    const token = jwt.sign(newUser.toJSON(), process.env.MY_SECRET, { expiresIn: '1h' });
+    const JWT = req.body.username;
+    const token = jwt.sign(JSON.stringify(JWT), process.env.MY_SECRET);
     res.cookie('Set_Cookie', token);
     res.send("new user create success");
   } catch (error) {
     res.status(400).send(error);
+    console.log(error)
   }
 
 };
@@ -33,14 +35,15 @@ const signIn = async (req, res, next) => {
   if (user) {
     bcrypt.hash(password, 10).then(async (hash) => {
       if (user) {
-        const token = jwt.sign(user.toJSON(), process.env.MY_SECRET, { expiresIn: '1h' });
-        res.cookie('Set_Cookie', token);
+        const JWT = req.body.username;
+        const token = jwt.sign(JSON.stringify(JWT), process.env.MY_SECRET);
+        res.cookie('Set_Cookie',token);
         req.session.userId = user.id;
         res.send({
           id: user.id,
           username: user.username,
           password: hash,
-          token: token,
+          token: hash,
         });
         console.log(req.session)
       } else {
@@ -55,7 +58,8 @@ const signIn = async (req, res, next) => {
 const signOut = async (req, res, next) => {
   const token = req.cookies.Set_Cookie;
   const { username, password } = req.body;
-  const user = await User.findOne({ username, password }).select("+password");
+  const user = await User.findOne({ username, password}).select("+password");
+
   if (token && user) {
     try {
       const user = jwt.verify(token, process.env.MY_SECRET);
@@ -66,6 +70,7 @@ const signOut = async (req, res, next) => {
       next();
     } catch (error) {
       res.status(400).send(error, 1);
+      console.log(error , 1)
     }
   }
   if (!token) {
@@ -73,6 +78,7 @@ const signOut = async (req, res, next) => {
       res.send('You are not login');
     } catch (error) {
       res.status(400).send(error, 2);
+      console.log(error ,2)
     }
   }
   if(!user) {
@@ -80,6 +86,7 @@ const signOut = async (req, res, next) => {
       res.send('Uncorrect user');
     } catch (error) {
       res.status(400).send(error, 3);
+      console.log(error,3)
     }
   }
 };
