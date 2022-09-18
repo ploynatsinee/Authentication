@@ -56,7 +56,7 @@ const signOut = async (req, res, next) => {
   const token = req.cookies.Set_Cookie;
   const { username, password } = req.body;
   const user = await User.findOne({ username, password }).select("+password");
-  if (token,user) {
+  if (token && user) {
     try {
       const user = jwt.verify(token, process.env.MY_SECRET);
       req.user = user;
