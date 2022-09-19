@@ -22,8 +22,8 @@ app.use(
 
 app.use(async (req, res, next) => {
   try {
-    await mongoose.connect(process.env.MONGO_DB_URI)
-    console.log("Database is connected")
+    await mongoose.connect(process.env.MONGO_DB_URI);
+    console.log("Database is connected");
     next();
   } catch (error) {
     console.log(error);
@@ -31,14 +31,18 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   try {
-    res.cookie('name', 'value=true', { expire: 360000 + Date.now(), httpOnly: true, signed: false });
+    res.cookie("name", "value=true", {
+      expire: 360000 + Date.now(),
+      httpOnly: true,
+      signed: false,
+    });
     res.send(req.cookies);
-    console.log('req Cookies: ', req.cookies)
+    console.log("req Cookies: ", req.cookies);
   } catch (error) {
     res.status(400).send(error);
-    console.log(error)
+    console.log(error);
   }
 });
 
