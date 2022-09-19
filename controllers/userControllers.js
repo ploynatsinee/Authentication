@@ -9,7 +9,7 @@ const createUser = async (req, res) => {
     await newUser.save();
     const JWT = req.body.username;
     const token = jwt.sign(JSON.stringify(JWT), process.env.MY_SECRET);
-    res.cookie('Set_Cookie', token);
+    res.cookie('user_token', token);
     res.send("new user create success");
   } catch (error) {
     res.status(400).send(error);
@@ -37,7 +37,7 @@ const signIn = async (req, res, next) => {
       if (user) {
         const JWT = req.body.username;
         const token = jwt.sign(JSON.stringify(JWT), process.env.MY_SECRET);
-        res.cookie('Set_Cookie',token);
+        res.cookie('user_token',token);
         req.session.userId = user.id;
         res.send({
           id: user.id,
@@ -56,7 +56,7 @@ const signIn = async (req, res, next) => {
 };
 
 const signOut = async (req, res, next) => {
-  const token = req.cookies.Set_Cookie;
+  const token = req.cookies.user_token;
   const { username, password } = req.body;
   const user = await User.findOne({ username, password}).select("+password");
 
@@ -65,7 +65,7 @@ const signOut = async (req, res, next) => {
       const user = jwt.verify(token, process.env.MY_SECRET);
       req.user = user;
       req.session.destroy();
-      res.clearCookie('Set_Cookie')
+      res.clearCookie('user_token')
       res.send('You are logged out');
       next();
     } catch (error) {
