@@ -62,8 +62,8 @@ const signOut = async (req, res, next) => {
 
   if (token && user) {
     try {
-      const user = jwt.verify(token, process.env.MY_SECRET);
-      req.user = user;
+      // const user = jwt.verify(token, process.env.MY_SECRET);
+      // req.user = user;
       req.session.destroy();
       res.clearCookie('user_token')
       res.send('You are logged out');
