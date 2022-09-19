@@ -83,7 +83,7 @@ const signOut = async (req, res, next) => {
   }
   if(!user) {
     try {
-      res.send('Uncorrect user');
+      res.send('incorrect user');
     } catch (error) {
       res.status(400).send(error, 3);
       console.log(error,3)
